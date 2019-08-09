@@ -9,6 +9,7 @@
 * VCA xN
 * ADSR EG xN
 * LFO
+* Glide/portamento
 * Mixer
 * Dual(quad? N?) CV step sequencer
 * Metronome
