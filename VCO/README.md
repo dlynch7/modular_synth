@@ -10,9 +10,9 @@
 * Signal out
 
 ## User interface
-* 16x2 LCD display (w/ backlight) - use an MCP23008 "backpack" to conserve MCU pins
-* Rotary encoder
-
+* Pitch knob
+* Pulse width knob
+* Rotary selector switch - waveform select
 
 ## How it works
 * Core: DDS (maybe [AD9833](https://www.analog.com/media/en/technical-documentation/data-sheets/AD9833.pdf)): generates sine, ramp, and square waves. [Here](https://www.allaboutcircuits.com/projects/how-to-DIY-waveform-generator-analog-devices-ad9833-ATmega328p/) is an example project.
