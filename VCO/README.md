@@ -2,20 +2,32 @@
 ---
 
 ## Inputs
-* Pitch CV
+* 1V/octave pitch CV
 * Sync CV
 * PWM CV
 
 ## Outputs
-* Signal out
+* Sine out
+* Square out
+* Triangle out
+* Ramp out
 
 ## User interface
-* Pitch knob
+* Tune knobs (coarse and fine)
 * Pulse width knob
-* Rotary selector switch - waveform select
+* Waveform select switch (w/ LEDs?)
 
 ## How it works
-* Core: DDS (maybe [AD9833](https://www.analog.com/media/en/technical-documentation/data-sheets/AD9833.pdf)): generates sine, triangle, and square waves. [Here](https://www.allaboutcircuits.com/projects/how-to-DIY-waveform-generator-analog-devices-ad9833-ATmega328p/) is an example project.
-* Can implement ramp wave with square wave and integrator
-* Can implement PWM with ramp wave and a comparator
+### Waveshaping
+* Core: digital sine wave generator (maybe [AD9833](https://www.analog.com/media/en/technical-documentation/data-sheets/AD9833.pdf)): generates sine, triangle, and square waves. [Here](https://www.allaboutcircuits.com/projects/how-to-DIY-waveform-generator-analog-devices-ad9833-ATmega328p/) is an example project.
+* [Example](https://www.edn.com/design/test-and-measurement/4333929/DDS-device-produces-sawtooth-waveform) of two DDS chips working together to create a sawtooth wave
+* Can implement PWM directly with the PIC, using a timer and an output compare module.
+* [A cool DDS-based function generator by Herptronix](https://github.com/herptronix/tiny-DDS)
 * [Achieving hard sync with the AD9833](https://www.muffwiggler.com/forum/viewtopic.php?p=2815552#2815552)
+
+### 1V/octave pitch CV
+Analog VCOs require a circuit to convert 1V/octave pitch CV signals to exponential voltages, but because this VCO has a digital core, the linear-to-exponential conversion can be done in software.
+
+TODO: determine whether this conversion should be done with math or with a lookup table.
+
+On the flip side, because this VCO has a digital core, it requires an ADC to process the 1V/octave pitch CV signal, and the resolution of the ADC is critical.
