@@ -31,6 +31,7 @@ Analog VCOs require a circuit to convert 1V/octave pitch CV signals to exponenti
 TODO: determine whether this conversion should be done with math or with a lookup table.
 
 On the flip side, because this VCO has a digital core, it requires an ADC to process the 1V/octave pitch CV signal, and the resolution of the ADC is critical.
+I wrote a [simple Python script](/math/calculate_ADC_resolution.py) to calculate the resolution in cents per ADC count, given the input volgate range and resolution in bits.
 
 | Input range (V)   | Resolution (bits) | Resolution (cents/count)  |
 | --------------    | ----------        | -------------             |
