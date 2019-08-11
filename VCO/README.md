@@ -7,6 +7,7 @@
 * PWM CV
 
 ## Outputs
+Waveform select switch (see User Interface) to choose between:
 * Sine out
 * Square out
 * Triangle out
@@ -32,27 +33,22 @@ With 12 semitones per octave, this standard results in 0.083333 V or 83.333 mV p
 Analog VCOs require a circuit to convert 1V/octave pitch CV signals to exponential voltages, but because this VCO has a digital core, the linear-to-exponential conversion can be done in software (TODO: determine whether this conversion should be done with math or with a lookup table).
 
 On the flip side, because this VCO has a digital core, it requires an ADC to process the 1V/octave pitch CV signal, and the resolution of the ADC is critical.
-I wrote a [simple Python script](/VCO/math/calculate_ADC_resolution.py) to calculate the resolution in cents per ADC count, given the input volgate range and resolution in bits.
+I wrote a [simple Python script](/VCO/math/calculate_ADC_resolution.py) to calculate the resolution in cents per ADC count, given a 0-12V pitch CV signal and the ADC's input range (V) and resolution (bits)
 
-| Input range (V)   | Resolution (bits) | Resolution (cents/count)  |
-| --------------    | ----------        | -------------             |
-| 3.3               | 8                 | 15.47                     |
-|                   | 10                | 3.87                      |
-|                   | 12                | 0.97                      |
-|                   | 14                | 0.24                      |
-|                   | 16                | 0.06                      |
-| 5.0               | 8                 | 23.44                     |
-|                   | 10                | 5.86                      |
-|                   | 12                | 1.46                      |
-|                   | 14                | 0.36                      |
-|                   | 16                | 0.09                      |
-| 12.0              | 8                 | 56.25                     |
-|                   | 10                | 14.06                     |
-|                   | 12                | 3.52                      |
-|                   | 14                | 0.88                      |
-|                   | 16                | 0.22                      |
+| Resolution (bits) | Resolution (cents/count)  |
+| ----------        | -------------             |
+| 8                 | 56.25                     |
+| 10                | 14.06                     |
+| 12                | 3.52                      |
+| 14                | 0.88                      |
+| 16                | 0.22                      |
 
-Another problem to consider is noise: there's no point using a 16-bit ADC instead of a 12-bit ADC when the extra resolution only serves to convert noise on the 1V/octact CV input.
+If I'm using an ADC with a small input range (3.3V or 5V for example), I need a way to scale down the 1V/octave CV signal so it fits in that input range.
+My naive approach is to use a voltage divider (followed by a unity gain buffer):
+* 12 V to 3.3 V: gain of 0.2750
+* 12 V to 5 V:   gain of 0.4167
+
+Yet another problem to consider is noise: there's no point using a 16-bit ADC instead of a 12-bit ADC when the extra resolution only serves to convert noise on the 1V/octact CV input.
 
 At the moment I'm considering [the MCP3201, a 12-bit ADC from Microchip](http://ww1.microchip.com/downloads/en/DeviceDoc/21290F.pdf), setting `V_REF` = 5 V.
 [The MAX1416, a 16-bit ADC from Maxim Integrated](https://datasheets.maximintegrated.com/en/ds/MAX1415-MAX1416.pdf) is a higher-resolution (and higher-cost) alternative;
